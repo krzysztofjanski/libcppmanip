@@ -12,6 +12,7 @@
 namespace clang
 {
 class VarDecl;
+class FunctionDecl;
 }
 
 namespace cppmanip

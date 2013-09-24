@@ -2,9 +2,12 @@ project(libcppmanip)
 
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_C_COMPILER "clang")
+set(CMAKE_CXX_COMPILER "clang++")
+
 add_definitions("-std=c++11")
 
-set(LLVM_CONFIG "llvm-config-3.2")
+set(LLVM_CONFIG "llvm-config-3.4")
 
 execute_process(COMMAND ${LLVM_CONFIG} --cxxflags OUTPUT_VARIABLE LLVM_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND ${LLVM_CONFIG} --ldflags OUTPUT_VARIABLE LLVM_LINKER_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -12,7 +15,7 @@ add_definitions("${LLVM_CXX_FLAGS} -fexceptions")
 set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} ${LLVM_LINKER_FLAGS}")
 set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} ${LLVM_LINKER_FLAGS}")
 
-include_directories("include" "src" "../gmock-1.6.0/fused-src")
+include_directories("/usr/lib/llvm-3.4/include" "include" "src" "../gmock-1.6.0/fused-src")
 link_directories("${PROJECT_SOURCE_DIR}/../gmock-1.6.0/build/gtest")
 link_directories("${PROJECT_SOURCE_DIR}/../gmock-1.6.0/build")
 
@@ -41,7 +44,7 @@ target_link_libraries(cppmanip LINK_PRIVATE
     clangSerialization.a clangDriver.a
     clangParse.a clangSema.a clangAnalysis.a
     clangRewriteFrontend.a clangRewriteCore.a clangEdit.a clangAST.a
-    clangLex.a clangBasic.a clang.a LLVM-3.2)
+    clangLex.a clangBasic.a clang.a LLVM-3.4)
 
 install(TARGETS cppmanip LIBRARY DESTINATION lib)
 install(FILES

@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 2.8)
 set(LIBCPPMANIP_INSTALLATION_INCLUDE "" CACHE FILEPATH "Path to libcppmanip installation include")
 set(LIBCPPMANIP_INSTALLATION_LIB "" CACHE FILEPATH "Path to libcppmanip installation lib")
 
+set(CMAKE_C_COMPILER "clang")
+set(CMAKE_CXX_COMPILER "clang++")
+
 add_definitions("-std=c++11")
 
 include_directories(${LIBCPPMANIP_INSTALLATION_INCLUDE} "src" "../gmock-1.6.0/fused-src")
