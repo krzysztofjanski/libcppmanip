@@ -10,4 +10,9 @@ SourceReplacements extractFunctionInFile(const std::string& functionName, Source
     return extractor->extractFunctionInFile(functionName, selection, filename);
 }
 
+SourceReplacements renameLocalVariableInFile(const RenameLocalVariableRequest& request)
+{
+    return SourceReplacements{};
+}
+
 }

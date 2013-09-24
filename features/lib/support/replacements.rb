@@ -29,6 +29,9 @@ class SourceReplacement
   def isTo phrase, source
     getColumnOfPhraseAtRow(phrase, @to.row, source) == (@to.col - phrase.length)
   end
+  def isInLine line0based
+    @from.row == line0based && @to.row == line0based
+  end
   def to_s
     "#{@from} -> #{@to} : \'#{text}\'"
   end

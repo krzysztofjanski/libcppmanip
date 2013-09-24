@@ -34,6 +34,14 @@ def runExtractFunction args
   @error = loadError(ERROR_FILE) if @replacements.nil?
 end
 
+def runRenameLocalVariable args
+  File.open(SOURCE_FILE, "w") { |f| f.write @source }
+  output = %x(#{RUNNER_BUILD_DIRECTORY}/cppmaniprunner_rename_local_variable #{args} 2>&1)
+  $?.should eq(0), "cppmanip failed with error \'#{$?}\': #{output}"
+  @replacements = loadReplacementsFromXml(REPLACEMENTS_FILE) if File.file?(REPLACEMENTS_FILE)
+  @error = loadError(ERROR_FILE) if @replacements.nil?
+end
+
 When /^I run function extraction from "(.*?)" to "(.*?)" with name "(.*?)"$/ do |startPhrase, endPhrase, functionName|
   startLoc, endLoc = rangeFromPhrases startPhrase, endPhrase, @source
   runExtractFunction "#{SOURCE_FILE} #{functionName} #{startLoc.row} #{startLoc.col} #{endLoc.row} #{endLoc.col}"
@@ -73,4 +81,15 @@ end
 
 Then /^there should be a replacement for "(.*?)" with "(.*?)"$/ do |phrase, replacementText|
   step "there should be a replacement from \"#{phrase}\" to \"#{phrase}\" with \"#{replacementText}\""
+end
+
+When(/^I run rename local variable from "(.*?)" to "(.*?)"$/) do |local_variable_from, local_variable_to|
+  startLoc, endLoc = rangeFromPhrases local_variable_from, local_variable_from, @source
+  runRenameLocalVariable "#{SOURCE_FILE} #{local_variable_from} #{local_variable_to} #{startLoc.row} #{startLoc.col}"
+end
+
+Then(/^there should be a replacement of "(.*?)" with "(.*?)" in line (\d+)$/) do |from, replacementText, line|
+  @replacements.index { |r|
+    r.text == replacementText && r.isFrom(from, @source) && r.isTo(from, @source) && r.isInLine(line-1, @source)
+  }.should_not be_nil, "replacement with \'#{replacementText}\' not found in #{@replacements}"
 end

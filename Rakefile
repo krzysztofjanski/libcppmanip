@@ -26,7 +26,7 @@ task :libcppmanip_runner => :install_libcppmanip do
     :LIBCPPMANIP_INSTALLATION_INCLUDE => absolute_path(LIBCPPMANIP_INSTALLATION_INCLUDE),
     :LIBCPPMANIP_INSTALLATION_LIB => absolute_path(LIBCPPMANIP_INSTALLATION_LIB)
   }
-  build_cmake_targets RUNNER_BUILD_DIRECTORY, [ :cppmaniprunner_extract_function, :cppmaniprunnertest ], env
+  build_cmake_targets RUNNER_BUILD_DIRECTORY, [ :cppmaniprunner_extract_function, :cppmaniprunner_rename_local_variable, :cppmaniprunnertest ], env
   sh "#{RUNNER_BUILD_DIRECTORY}/cppmaniprunnertest"
 end
 

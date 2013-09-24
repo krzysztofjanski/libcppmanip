@@ -27,5 +27,7 @@ add_executable(cppmaniprunnertest
 target_link_libraries(cppmaniprunnertest cppmaniprunnercore gtest gmock pthread)
 
 add_executable(cppmaniprunner_extract_function src/extract_function.cpp)
+add_executable(cppmaniprunner_rename_local_variable src/rename_local_variable.cpp)
 
 target_link_libraries(cppmaniprunner_extract_function cppmanip cppmaniprunnercore boost_serialization)
+target_link_libraries(cppmaniprunner_rename_local_variable cppmanip cppmaniprunnercore boost_serialization)

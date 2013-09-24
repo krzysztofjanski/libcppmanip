@@ -1,6 +1,7 @@
 #ifndef CPPMANIP_C20DF98AB97E467387AA8DD21F900A0E_HPP
 #define CPPMANIP_C20DF98AB97E467387AA8DD21F900A0E_HPP
 #include <cppmanip/SourceSelection.hpp>
+#include <CppManip.hpp>
 #include <string>
 #include <vector>
 
@@ -24,6 +25,7 @@ class CommandLineParser
 {
 public:
     ExtractFunctionRequest parseExtractFunction(int argc, const char** argv);
+    cppmanip::RenameLocalVariableRequest parseRenameLocalVariable(int argc, const char** argv);
 private:
     static unsigned to_u(const char *s);
 };
