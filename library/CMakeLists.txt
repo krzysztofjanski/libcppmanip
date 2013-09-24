@@ -31,6 +31,7 @@ add_library(cppmanip SHARED
     src/cppmanip/OffsetConverter.cpp
     src/cppmanip/ClangFunctionExtractor.cpp
     src/cppmanip/ClangFunctionExtractorFactory.cpp
+    src/cppmanip/Renamer.cpp
     src/cppmanip/DefaultFunctionLocator.cpp
     src/cppmanip/TranslationUnitFunctionExtractor.cpp
     src/cppmanip/TranslationUnitFunctionExtractorFactory.cpp

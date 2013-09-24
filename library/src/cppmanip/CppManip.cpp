@@ -1,5 +1,6 @@
 #include "CppManip.hpp"
 #include "ClangFunctionExtractorFactory.hpp"
+#include "Renamer.hpp"
 
 namespace cppmanip
 {
@@ -12,7 +13,8 @@ SourceReplacements extractFunctionInFile(const std::string& functionName, Source
 
 SourceReplacements renameLocalVariableInFile(const RenameLocalVariableRequest& request)
 {
-    return SourceReplacements{};
+    auto renamer = RenamerFactory().createClangRenamer();
+    return renamer->renameLocalVariableInFile(request);
 }
 
 }
