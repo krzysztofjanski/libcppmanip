@@ -1,5 +1,5 @@
 #include <cppmanip/runner/CommandLineParser.hpp>
-#include <CppManip.hpp>
+#include <cppmanip/boundary/renameLocalVariableInFile.hpp>
 #include <stdexcept>
 #include <iostream>
 #include <boost/range/algorithm_ext/push_back.hpp>

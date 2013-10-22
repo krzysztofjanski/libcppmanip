@@ -1,4 +1,5 @@
 #include <cppmanip/runner/CommandLineParser.hpp>
+#include <CppManip.hpp>
 #include <iostream>
 #include <fstream>
 #include <boost/archive/xml_oarchive.hpp>
@@ -23,14 +24,9 @@ void saveReplacements(cppmanip::SourceReplacements replacements)
     oa << boost::serialization::make_nvp("replacements", replacements);
 }
 
-SourceReplacements replacementsOfLocalVariable(const RenameLocalVariableRequest& req)
-{
-    return SourceReplacements();
-}
-
 void renameLocalVariable(const RenameLocalVariableRequest& req)
 {
-    auto replacements = replacementsOfLocalVariable(req);
+    auto replacements = cppmanip::boundary::renameLocalVariableInFile(req.nameFrom, req.nameTo, req.locationOfLocalScope, req.sourceFilename);
     saveReplacements(replacements);
 }
 

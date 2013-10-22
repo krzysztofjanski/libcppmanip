@@ -23,6 +23,7 @@ add_library(cppmanip SHARED
     src/cppmanip/io/TextFileOps.cpp
     src/cppmanip/clangutil/ClangToolArgsBuilder.cpp
     src/cppmanip/extractFunctionInFile.cpp
+    src/cppmanip/renameLocalVariableInFile.cpp
     src/cppmanip/text/OffsetConverter.cpp
     src/cppmanip/text/SourceLocationConverter.cpp
     src/cppmanip/clangutil/getFunctionFromAstInSelection.cpp
@@ -61,6 +62,7 @@ install(FILES
         "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/SourceReplacement.hpp"
         "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/SourceLocation.hpp"
         "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/extractFunctionInFile.hpp"
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/renameLocalVariableInFile.hpp"
         DESTINATION include/cppmanip/boundary)
 
 add_executable(cppmaniptest
