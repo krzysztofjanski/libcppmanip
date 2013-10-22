@@ -1,6 +1,7 @@
 #include "findSelectedStatementsInFunction.hpp"
 #include <clang/AST/ASTContext.h>
 #include <boost/range/algorithm.hpp>
+#include <stdexcept>
 
 namespace cppmanip
 {

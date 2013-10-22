@@ -23,9 +23,14 @@ void saveReplacements(cppmanip::SourceReplacements replacements)
     oa << boost::serialization::make_nvp("replacements", replacements);
 }
 
-void renameLocalVariable(RenameLocalVariableRequest req)
+SourceReplacements replacementsOfLocalVariable(const RenameLocalVariableRequest& req)
 {
-    auto replacements = cppmanip::renameLocalVariableInFile(req);
+    return SourceReplacements();
+}
+
+void renameLocalVariable(const RenameLocalVariableRequest& req)
+{
+    auto replacements = replacementsOfLocalVariable(req);
     saveReplacements(replacements);
 }
 

@@ -20,11 +20,19 @@ struct ExtractFunctionRequest
     std::vector<Location> locations;
 };
 
+struct RenameLocalVariableRequest
+{
+    std::string sourceFilename;
+    std::string nameFrom;
+    std::string nameTo;
+    SourceLocation locationOfLocalScope;
+};
+
 class CommandLineParser
 {
 public:
     ExtractFunctionRequest parseExtractFunction(int argc, const char** argv);
-    cppmanip::RenameLocalVariableRequest parseRenameLocalVariable(int argc, const char** argv);
+    RenameLocalVariableRequest parseRenameLocalVariable(int argc, const char** argv);
 private:
     static unsigned to_u(const char *s);
 };
