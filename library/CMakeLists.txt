@@ -11,7 +11,7 @@ set(LLVM_CONFIG "llvm-config-3.4")
 
 execute_process(COMMAND ${LLVM_CONFIG} --cxxflags OUTPUT_VARIABLE LLVM_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND ${LLVM_CONFIG} --ldflags OUTPUT_VARIABLE LLVM_LINKER_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-add_definitions("${LLVM_CXX_FLAGS} -fexceptions")
+add_definitions("${LLVM_CXX_FLAGS} -fexceptions -Wall -Werror=return-type -Wno-unused-local-typedefs -fno-strict-aliasing")
 set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} ${LLVM_LINKER_FLAGS}")
 set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} ${LLVM_LINKER_FLAGS}")
 
@@ -20,24 +20,28 @@ link_directories("${PROJECT_SOURCE_DIR}/../gmock-1.6.0/build/gtest")
 link_directories("${PROJECT_SOURCE_DIR}/../gmock-1.6.0/build")
 
 add_library(cppmanip SHARED
-    src/cppmanip/SourceExtractor.cpp
     src/cppmanip/io/TextFileOps.cpp
     src/cppmanip/clangutil/ClangToolArgsBuilder.cpp
-    src/cppmanip/CppManip.cpp
-    src/cppmanip/PrettyFunctionPrinter.cpp
-    src/cppmanip/DelayedMethodExtractor.cpp
-    src/cppmanip/NaiveLocalVariableLocator.cpp
-    src/cppmanip/text/TextReplacementRecorder.cpp
-    src/cppmanip/OffsetConverter.cpp
-    src/cppmanip/ClangFunctionExtractor.cpp
-    src/cppmanip/ClangFunctionExtractorFactory.cpp
-    src/cppmanip/Renamer.cpp
-    src/cppmanip/DefaultFunctionLocator.cpp
-    src/cppmanip/TranslationUnitFunctionExtractor.cpp
-    src/cppmanip/TranslationUnitFunctionExtractorFactory.cpp
+    src/cppmanip/extractFunctionInFile.cpp
+    src/cppmanip/text/OffsetConverter.cpp
+    src/cppmanip/text/SourceLocationConverter.cpp
+    src/cppmanip/clangutil/getFunctionFromAstInSelection.cpp
     src/cppmanip/clangutil/runTranslationUnitHandlerOnFile.cpp
-    src/cppmanip/DefaultStatementLocator.cpp
-    src/cppmanip/getStmtRange.cpp
+    src/cppmanip/query/findSelectedStatementsInFunction.cpp
+    src/cppmanip/clangutil/getStmtOffsetRange.cpp
+    src/cppmanip/query/findLocalVariablesRequiredForStmts.cpp
+    src/cppmanip/query/findVariablesDeclaredByAndUsedAfterStmts.cpp
+    src/cppmanip/format/printFunction.cpp
+    src/cppmanip/clangutil/getFunctionStatements.cpp
+    src/cppmanip/clangutil/AstGateway.cpp
+    src/cppmanip/DefaultFunctionExtractor.cpp
+    src/cppmanip/DefaultFunctionExtractorFactory.cpp
+    src/cppmanip/FileBasedStatementLocator.cpp
+    src/cppmanip/NoReturnFunctionExtractionValidator.cpp
+    src/cppmanip/text/convertReplacements.cpp
+    src/cppmanip/format/DefaultReplacementFunctionPrinter.cpp
+    src/cppmanip/DefaultFunctionReplacer.cpp
+    src/cppmanip/format/formatStatements.cpp
 )
 
 target_link_libraries(cppmanip LINK_PRIVATE
@@ -52,26 +56,35 @@ install(FILES
         "${PROJECT_SOURCE_DIR}/include/CppManip.hpp"
         DESTINATION include)
 install(FILES
-        "${PROJECT_SOURCE_DIR}/include/cppmanip/SourceSelection.hpp"
-        "${PROJECT_SOURCE_DIR}/include/cppmanip/ExtractMethodError.hpp"
-        "${PROJECT_SOURCE_DIR}/include/cppmanip/SourceReplacement.hpp"
-        "${PROJECT_SOURCE_DIR}/include/cppmanip/SourceLocation.hpp"
-        DESTINATION include/cppmanip)
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/SourceSelection.hpp"
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/ExtractMethodError.hpp"
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/SourceReplacement.hpp"
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/SourceLocation.hpp"
+        "${PROJECT_SOURCE_DIR}/include/cppmanip/boundary/extractFunctionInFile.hpp"
+        DESTINATION include/cppmanip/boundary)
 
 add_executable(cppmaniptest
-    test/cppmanip/ParsedFunction.cpp
-    test/cppmanip/Condition.cpp
+    test/cppmanip/clangutil/ParsedFunction.cpp
+    test/cppmanip/clangutil/Condition.cpp
     test/main.cpp
-    test/cppmanip/text/TextOperationApplierTest.cpp
-    test/cppmanip/OffsetRangeTest.cpp
+    test/cppmanip/text/StrictOperationRecorderTest.cpp
+    test/cppmanip/math/PositionRangeTest.cpp
     test/cppmanip/clangutil/ClangToolArgsBuilderTest.cpp
-    test/cppmanip/SourceExtractorTest.cpp
-    test/cppmanip/text/TextReplacementRecorderTest.cpp
-    test/cppmanip/OffsetConverterTest.cpp
-    test/cppmanip/DefaultFunctionLocatorTest.cpp
-    test/cppmanip/SourceLocationOperatorsTest.cpp
-    test/cppmanip/DefaultStatementLocatorTest.cpp
-    test/cppmanip/getStmtRangeTest.cpp
+    test/cppmanip/text/OffsetConverterTest.cpp
+    test/cppmanip/clangutil/getFunctionFromAstInSelectionTest.cpp
+    test/cppmanip/text/SourceLocationConverterTest.cpp
+    test/cppmanip/query/findSelectedStatementsInFunctionTest.cpp
+    test/cppmanip/clangutil/getStmtOffsetRangeTest.cpp
+    test/cppmanip/query/findLocalVariablesRequiredForStmtsTest.cpp
+    test/cppmanip/clangutil/getASTContextForSource.cpp
+    test/cppmanip/query/findVariablesDeclaredByAndUsedAfterStmtsTest.cpp
+    test/cppmanip/format/printFunctionTest.cpp
+    test/cppmanip/query/LocalVariablesAssert.cpp
+    test/cppmanip/clangutil/getFunctionStatementsTest.cpp
+    test/cppmanip/query/AstFactories.cpp
+    test/cppmanip/text/convertReplacementsTest.cpp
+    test/cppmanip/format/formatStatementsTest.cpp
+    test/cppmanip/format/DefaultReplacementFunctionPrinterTest.cpp
 ) 
 
 target_link_libraries(cppmaniptest cppmanip gtest gmock boost_thread boost_system pthread)

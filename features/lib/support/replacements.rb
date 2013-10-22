@@ -33,7 +33,7 @@ class SourceReplacement
     @from.row == line0based && @to.row == line0based
   end
   def to_s
-    "#{@from} -> #{@to} : \'#{text}\'"
+    "#{@from} -> #{@to} :\n \'#{text}\'\n"
   end
 private
   def getColumnOfPhraseAtRow phrase, row, source
